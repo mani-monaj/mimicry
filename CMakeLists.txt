@@ -2,12 +2,12 @@ cmake_minimum_required(VERSION 2.6)
 
 project(mimicry)
 
-set(myproject_HEADERS )
-set(myproject_SOURCES src/mimicry.cpp)
+set(mimicry_HEADERS src/ds.h)
+set(mimicry_SOURCES src/mimicry.cpp src/ds.cpp)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ../bin)
 
 add_executable(mimicry
-    ${myproject_SOURCES}
-    ${myproject_MOC}
+    ${mimicry_HEADERS}
+    ${mimicry_SOURCES}
 )
