@@ -2,6 +2,7 @@
 #define _DS_H
 
 #include <vector>
+#include <list>
 #include <string>
 #include <sstream>
 
@@ -26,41 +27,13 @@ public:
     CHyperString(const string &s);
     void update(const string &s);
     void clear();
-    const vector<SHyperChar>& getData() const {return data;}
+    void reconstruct();
+
+    const vector<SHyperChar>& getDataCst() const {return data;}
+    vector<SHyperChar>& getData() {return data;}
 
     string getRawString() const;
     string getString() const;
-};
-
-
-class CBaseTransform
-{
-protected:
-    string name;
-    string reason;
-    unsigned int cost;
-public:
-    CBaseTransform(): name("undefined"), reason(""), cost(0) {;}
-    CBaseTransform(string _name): name(_name), reason(""), cost(0) {;}
-    unsigned int getCost() const { return cost; }
-    virtual ~CBaseTransform() {;}
-    virtual string why() { return reason; }
-    virtual bool deduce(const SHyperChar& src, const SHyperChar& dest) = 0;
-};
-
-class CSingleDigitTransform: public CBaseTransform
-{
-private:
-    char search;
-    char replace;
-public:
-    CSingleDigitTransform(char _s, char _r):
-        search(_s),
-        replace(_r)
-    { updateReason(); }
-    CSingleDigitTransform() {;}
-    void updateReason();
-    bool deduce(const SHyperChar &src, const SHyperChar &dest);
 };
 
 #endif

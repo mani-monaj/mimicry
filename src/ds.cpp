@@ -13,10 +13,27 @@ void CHyperString::update(const string &s)
         if ((s[i] < 'a') || (s[i]) > 'z') continue;
         if (last == s[i]) {
             data.back().count++;
+            pose++;
         } else {
             data.push_back(SHyperChar(pose++, s[i], 1));
         }
         last = s[i];
+    }
+}
+
+void CHyperString::reconstruct()
+{
+    unsigned int size = 0;
+    for (unsigned int i = 0; i < data.size(); i++) {
+        size += data.at(i).count;
+    }
+    rawData.resize(size);
+
+    for (unsigned int i = 0; i < data.size(); i++) {
+        SHyperChar hc = data.at(i);
+        for (unsigned int j = 0; j < hc.count; j++) {
+            rawData[hc.pose + j] = hc.c;
+        }
     }
 }
 
@@ -41,20 +58,4 @@ string CHyperString::getString() const
     return debug.str();
 }
 
-bool CSingleDigitTransform::deduce(const SHyperChar &src, const SHyperChar &dest)
-{
-    if (src.c == dest.c) return false;
-    search = src.c;
-    replace = dest.c;
-    cost = 26;
 
-    updateReason();
-    return true;
-}
-
-void CSingleDigitTransform::updateReason()
-{
-    stringstream _reason;
-    _reason << "Replace all " << search << " with " << replace;
-    reason = _reason.str();
-}
