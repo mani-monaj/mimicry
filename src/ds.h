@@ -5,6 +5,7 @@
 #include <list>
 #include <string>
 #include <sstream>
+#include <assert.h>
 
 using namespace std;
 
@@ -29,6 +30,7 @@ public:
     void clear();
     void reconstruct();
 
+    unsigned int getsize() const { return data.size(); }
     const vector<SHyperChar>& getDataCst() const {return data;}
     vector<SHyperChar>& getData() {return data;}
 

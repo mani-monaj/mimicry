@@ -58,4 +58,3 @@ string CHyperString::getString() const
     return debug.str();
 }
 
-
