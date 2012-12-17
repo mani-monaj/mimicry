@@ -1,5 +1,6 @@
 #include "ds.h"
 
+#include <iostream>
 CHyperString::CHyperString(const string &s): rawData(s)
 {
     update(s);
@@ -13,7 +14,7 @@ void CHyperString::update(const string &s)
         if ((s[i] < 'a') || (s[i]) > 'z') continue;
         if (last == s[i]) {
             data.back().count++;
-            pose++;
+            //pose++;
         } else {
             data.push_back(SHyperChar(pose++, s[i], 1));
         }
@@ -29,10 +30,12 @@ void CHyperString::reconstruct()
     }
     rawData.resize(size);
 
+    // The list should be sorted by pose
+    unsigned int index = 0;
     for (unsigned int i = 0; i < data.size(); i++) {
         SHyperChar hc = data.at(i);
         for (unsigned int j = 0; j < hc.count; j++) {
-            rawData[hc.pose + j] = hc.c;
+            rawData[index++] = hc.c;
         }
     }
 }

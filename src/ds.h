@@ -16,6 +16,10 @@ struct SHyperChar
     unsigned int count;
     SHyperChar(unsigned int _pose, char _c, unsigned int _count): pose(_pose), c(_c), count(_count) {;}
     SHyperChar(void) {;}
+    bool operator ==(const SHyperChar& rhs) const
+    {
+        return ((pose == rhs.pose) && (c == rhs.c) && (count == rhs.count));
+    }
 };
 
 class CHyperString

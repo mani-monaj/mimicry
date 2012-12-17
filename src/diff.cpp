@@ -3,7 +3,6 @@
 bool CDigitDiff::deduce(const char src, const char dest)
 {
     if (src == dest) return false;
-    search = src;
     replace = dest;
     cost = 25;
     updateReason();
@@ -13,14 +12,14 @@ bool CDigitDiff::deduce(const char src, const char dest)
 void CDigitDiff::updateReason()
 {
     stringstream _reason;
-    _reason << "Replace  " << search << " with " << replace;
+    _reason << "Replace with " << replace;
     reason = _reason.str();
 }
 
-unsigned int CDigitDiff::apply(const char src, char &dest)
+unsigned int CDigitDiff::apply(const char src, char &dest) const
 {
     unsigned int totalCost = 0;
-    if (src == search)
+    if (src != replace)
     {
         dest = replace;
         totalCost = cost;
@@ -45,7 +44,7 @@ void CMathDiff::updateReason()
     reason = _reason.str();
 }
 
-unsigned int CMathDiff::apply(const char src, char &dest)
+unsigned int CMathDiff::apply(const char src, char &dest) const
 {
     dest = src + incr;
     if (dest > 'z') dest -= ('z' - 'a' + 1);
