@@ -9,8 +9,10 @@
 
 using namespace std;
 
-struct SHyperChar
+// Lame Class, Converted from Struct
+class SHyperChar
 {
+public:
     unsigned int pose;
     char c;
     unsigned int count;
@@ -19,6 +21,11 @@ struct SHyperChar
     bool operator ==(const SHyperChar& rhs) const
     {
         return ((pose == rhs.pose) && (c == rhs.c) && (count == rhs.count));
+    }
+    friend std::ostream& operator<< (std::ostream &out, const SHyperChar &hc)
+    {
+        out << "[" << hc.pose << ":" << hc.c << "^" << hc.count << "]";
+        return out;
     }
 };
 
@@ -29,17 +36,29 @@ private:
     vector<SHyperChar> data;
 
 public:
+    CHyperString();
     CHyperString(const string &s);
     void update(const string &s);
     void clear();
     void reconstruct();
 
-    unsigned int getsize() const { return data.size(); }
+    unsigned int getSize() const { return data.size(); }
     const vector<SHyperChar>& getDataCst() const {return data;}
     vector<SHyperChar>& getData() {return data;}
 
     string getRawString() const;
     string getString() const;
+
+    bool operator==(const CHyperString& rhs) const
+    {
+        return (rawData == rhs.rawData) && (data == rhs.data);
+    }
+
+    friend std::ostream& operator<< (std::ostream &out, const CHyperString &hs)
+    {
+        out << hs.getString();
+        return out;
+    }
 };
 
 #endif

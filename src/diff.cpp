@@ -18,6 +18,7 @@ void CDigitDiff::updateReason()
 
 unsigned int CDigitDiff::apply(const char src, char &dest) const
 {
+    dest = src;
     unsigned int totalCost = 0;
     if (src != replace)
     {

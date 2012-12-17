@@ -1,6 +1,12 @@
 #include "ds.h"
 
 #include <iostream>
+
+CHyperString::CHyperString() : rawData("")
+{
+    update("");
+}
+
 CHyperString::CHyperString(const string &s): rawData(s)
 {
     update(s);
@@ -56,7 +62,7 @@ string CHyperString::getString() const
     stringstream debug;
     for (unsigned int i = 0; i < data.size(); i++)
     {
-        debug << "[" << data[i].pose << ":" << data[i].c << "," << data[i].count << "]";
+        debug << data[i];
     }
     return debug.str();
 }

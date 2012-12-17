@@ -13,10 +13,12 @@ protected:
     CBaseDiff* diffKernel;
 public:
     CBaseTransformRule(string _name, bool _isDigit): name(_name), reason(""), isDigit(_isDigit), cost(0) {;}
+    unsigned int getCost() const {return cost;}
     virtual ~CBaseTransformRule() {;}
     virtual string why() const { return reason; }
     virtual bool deduce(const SHyperChar &src, const SHyperChar& dest) = 0;
     virtual unsigned int apply(const SHyperChar &src, SHyperChar& dest) const = 0;
+    unsigned int transform(const CHyperString& src, CHyperString &dest) const;
 };
 
 class CInPlaceTransformRule : public CBaseTransformRule
@@ -44,7 +46,6 @@ private:
     char searchChar;
     unsigned int searchScale;
     unsigned int replaceScale;
-    bool isGeneralScale;
     void updateReason();
 public:
     CAnyPlaceTransformRule(string _name, bool _isDigit);
