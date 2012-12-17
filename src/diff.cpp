@@ -1,4 +1,4 @@
-#include "transforms.h"
+#include "diff.h"
 
 bool CDigitDiff::deduce(const char src, const char dest)
 {
