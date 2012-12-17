@@ -5,13 +5,13 @@
 
 int main(int argc, char** argv)
 {
-    CHyperString s0("abbcccdddde");
+    CHyperString s0("abc");
     cout << s0.getString() <<endl;
 
     CHyperString s1("abc");
-    CHyperString s2("efg");
-    vector<CDigitDiff> diffs;
-    CDigitDiff t1;
+    CHyperString s2("zyx");
+    vector<CMathDiff> diffs;
+    CMathDiff t1;
 
     vector<SHyperChar> &d0 = s0.getData();
     const vector<SHyperChar> &d1 = s1.getDataCst();

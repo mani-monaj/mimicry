@@ -5,7 +5,7 @@ bool CDigitDiff::deduce(const char src, const char dest)
     if (src == dest) return false;
     search = src;
     replace = dest;
-    cost = 26;
+    cost = 25;
     updateReason();
     return true;
 }
@@ -41,12 +41,13 @@ bool CMathDiff::deduce(const char src, const char dest)
 void CMathDiff::updateReason()
 {
     stringstream _reason;
-    _reason << "Increment by " << incr;
+    _reason << "Increment by " << (int) incr;
     reason = _reason.str();
 }
 
 unsigned int CMathDiff::apply(const char src, char &dest)
 {
     dest = src + incr;
+    if (dest > 'z') dest -= ('z' - 'a' + 1);
     return cost;
 }
