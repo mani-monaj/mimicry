@@ -3,59 +3,49 @@
 
 #include "ds.h"
 
-class CBaseTransform
+class CBaseDiff
 {
 protected:
-    string name;
     string reason;
     unsigned int cost;
 public:
-    CBaseTransform(): name("undefined"), reason(""), cost(0) {;}
-    CBaseTransform(string _name): name(_name), reason(""), cost(0) {;}
+    CBaseDiff(): reason(""), cost(0) {;}
     unsigned int getCost() const { return cost; }
-    virtual ~CBaseTransform() {;}
+    virtual ~CBaseDiff() {;}
     virtual string why() { return reason; }
-    virtual bool deduce(const SHyperChar& src, const SHyperChar& dest) = 0;
-    virtual unsigned int apply(const CHyperString& src, CHyperString& dest) = 0;
+    virtual bool deduce(const char src, const char dest) = 0;
+    virtual unsigned int apply(const char src, char& dest) = 0;
 };
 
-/* Search/Replace for all occurances */
-class CDigitTransform: public CBaseTransform
+/* Change search with replace */
+class CDigitDiff: public CBaseDiff
 {
 private:
     char search;
     char replace;
-    unsigned int basePose;
 public:
-    CDigitTransform(char _s, char _r, unsigned int _bp):
+    CDigitDiff(char _s, char _r):
         search(_s),
-        replace(_r),
-        basePose(_bp)
+        replace(_r)
     { updateReason(); }
-    CDigitTransform() {;}
+    CDigitDiff() {;}
     void updateReason();
-    bool deduce(const SHyperChar &src, const SHyperChar &dest);
-    unsigned int apply(const CHyperString &src, CHyperString &dest);
+    bool deduce(const char src, const char dest);
+    unsigned int apply(const char src, char& dest);
 };
 
-/* Search/Replace for any occurances at pose only */
-class CSingleDigitTransform: public CBaseTransform
+class CMathDiff: public CBaseDiff
 {
 private:
-    char search;
-    char replace;
-    unsigned int pose;
+    char incr;
 public:
-    CSingleDigitTransform(char _s, char _r, unsigned int _p):
-        search(_s),
-        replace(_r),
-        pose(_p)
+    CMathDiff(char _i):
+        incr(_i)
     { updateReason(); }
-    CSingleDigitTransform() {;}
+    CMathDiff() {;}
     void updateReason();
-    bool deduce(const SHyperChar &src, const SHyperChar &dest);
-    unsigned int apply(const CHyperString &src, CHyperString &dest);
+    bool deduce(const char src, const char dest);
+    unsigned int apply(const char src, char& dest);
 };
-
 
 #endif
