@@ -1,8 +1,8 @@
 #include "transform.h"
 #include <sstream>
 #include <cstdlib>
-
-#include<iostream>
+#include <iostream>
+#include <algorithm>
 
 unsigned int CBaseTransformRule::transform(const CHyperString &src, CHyperString &dest) const
 {
@@ -17,6 +17,12 @@ unsigned int CBaseTransformRule::transform(const CHyperString &src, CHyperString
     }
     dest.reconstruct();
     return totalCost;
+}
+
+std::ostream& operator<< (std::ostream &out, const CBaseTransformRule &what)
+{
+    out << what.why();
+    return out;
 }
 
 CInPlaceTransformRule::CInPlaceTransformRule(string _name, bool _isDigit):
@@ -47,7 +53,9 @@ bool CInPlaceTransformRule::deduce(const SHyperChar &src, const SHyperChar &dest
     searchPose = src.pose;
     unsigned int totalCost = 0;
     if (changeChar) {
-        totalCost += diffKernel->deduce(src.c, dest.c);
+        diffKernel->deduce(src.c, dest.c);
+        totalCost += diffKernel->getCost();
+        cout << "Updating totalcost to " << totalCost << endl;
     }
     if (changeScale) {
         searchScale = src.count;
@@ -161,3 +169,84 @@ void CAnyPlaceTransformRule::updateReason()
     reason = r.str();
 }
 
+
+void CHStringTransform::reset()
+{
+    for (unsigned int i = 0; i < rules.size(); i++)
+    {
+        delete rules[i];
+    }
+    rules.clear();
+}
+
+CHStringTransform::~CHStringTransform()
+{
+    reset();
+}
+
+bool CHStringTransform::deduce(const CHyperString &src, const CHyperString &dest)
+{
+    if (src == dest) return false;
+    assert(src.getSize() == dest.getSize());
+    rules.clear();
+//    bool isInPlace = true;
+//    for (unsigned int i = 0; i < src.getSize(); i++) {
+//        if (src.getDataCst().at(i).pose != dest.getDataCst().at(i).pose) {
+//            isInPlace = false;
+//            break;
+//        }
+//    }
+
+
+    for (unsigned int i = 0; i < src.getSize(); i++) {
+        CBaseTransformRule* t;
+        if (isInPlace) {
+            t = new CInPlaceTransformRule("inplace", isDigit);
+        } else {
+            t = new CAnyPlaceTransformRule("anyplace", isDigit);
+        }
+        if (t->deduce(src.getDataCst()[i], dest.getDataCst()[i])) {
+                rules.push_back(t);
+        }
+    }
+    if (rules.size() == 0) return false;
+
+    CHyperString dummy(src);
+    transform(src, dummy);
+    if (!(dummy == dest)) {
+        cout << "Dummy: " << dummy << " ~ " << dummy.getRawString()<< endl;
+        cout << "Dest:  " << dest << " ~ " << dest.getRawString() << endl;
+        reset();
+        return false;
+    }
+    return true;
+}
+
+unsigned int CHStringTransform::transform(const CHyperString &src, CHyperString &dest) const
+{
+    unsigned int totalCost = 0;
+    dest = src;
+    CHyperString dummy(dest);
+    for (unsigned int i = 0; i < rules.size(); i++)
+    {
+        for (unsigned int j = 0; j < src.getSize(); j++)
+        {
+            totalCost += rules[i]->apply(dest.getDataCst()[j], dummy.getData()[j]);
+        }
+        dummy.reconstruct();
+        dest = dummy;
+    }
+//    cout << "reconstructing ..." << endl;
+//    cout << dest.getString() << endl;
+//    dest.reconstruct();
+
+    return totalCost;
+}
+
+std::ostream& operator<< (std::ostream &out, const CHStringTransform &what)
+{
+    for (unsigned int i = 0; i < what.getSize(); i++) {
+        out << "Rule " << i << " : " << *(what.rules[i]) << std::endl;
+    }
+    return out;
+}

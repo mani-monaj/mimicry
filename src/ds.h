@@ -22,6 +22,10 @@ public:
     {
         return ((pose == rhs.pose) && (c == rhs.c) && (count == rhs.count));
     }
+    bool operator <(const SHyperChar& rhs) const
+    {
+        return pose < rhs.pose;
+    }
     friend std::ostream& operator<< (std::ostream &out, const SHyperChar &hc)
     {
         out << "[" << hc.pose << ":" << hc.c << "^" << hc.count << "]";

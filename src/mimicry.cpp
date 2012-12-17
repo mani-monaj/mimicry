@@ -4,6 +4,7 @@
 #include "ds.h"
 #include "diff.h"
 #include "transform.h"
+#include "algorithm"
 
 using namespace std;
 
@@ -49,6 +50,14 @@ int main(int argc, char** argv)
     dest.update(argv[2]);
     target.update(argv[3]);
 
+//    unsigned int i = 0;
+//    do {
+//        source.reconstruct();
+//        cout << i++ << " : " << source.getRawString() << endl;
+
+//    } while (next_permutation(source.getData().begin(), source.getData().end()));
+//    return 0;
+
     if (!
             ((source.getSize() > 0) &&
              (dest.getSize() > 0) &&
@@ -67,13 +76,15 @@ int main(int argc, char** argv)
     }
 
     if (debug) {
-        cout << source << endl;
-        cout << dest << endl;
-        cout << target << endl;
+        cout << source << " ~ " << source.getRawString() << endl;
+        cout << dest << " ~ "<< dest.getRawString()<< endl;
+        cout << target << " ~ "<< target.getRawString()<< endl;
     }
 
     // In Place Transforms
-    for (unsigned int i = 0; i < source.getSize(); i++) {
+    CHStringTransform* t = new CHStringTransform(false, true);
+    t->deduce(source, dest);
+    /*for (unsigned int i = 0; i < source.getSize(); i++) {
         for (unsigned int j = 0; j < 2; j++)
         {
             CInPlaceTransformRule* t = new CInPlaceTransformRule("dummy", j == 0);
@@ -83,12 +94,17 @@ int main(int argc, char** argv)
         }
     }
 
-    dumpTransoforms();
+    dumpTransoforms();*/
     if (debug) {
-        cout << "Number of possible transforms: " << mTransforms.size() << endl;
+        cout << "Number of rules in transform: " << t->getSize() << endl;
     }
+    CHyperString dummy;
+    cout << "Rules : " << endl << *t << endl;
+    cout << "Cost : " << t->transform(target, dummy) << endl;
+    cout << "Result: " << dummy.getRawString() << endl;
 
-    cleanup();
+    delete t;
+    //cleanup();
     return 0;
 }
 

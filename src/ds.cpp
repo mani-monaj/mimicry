@@ -14,6 +14,7 @@ CHyperString::CHyperString(const string &s): rawData(s)
 
 void CHyperString::update(const string &s)
 {
+    rawData = s;
     char last; // TODO: Init this
     unsigned int pose = 0;
     for (unsigned int i = 0; i < s.length(); i++) {

@@ -19,6 +19,7 @@ public:
     virtual bool deduce(const SHyperChar &src, const SHyperChar& dest) = 0;
     virtual unsigned int apply(const SHyperChar &src, SHyperChar& dest) const = 0;
     unsigned int transform(const CHyperString& src, CHyperString &dest) const;
+    friend std::ostream& operator<< (std::ostream &out, const CBaseTransformRule &what);
 };
 
 class CInPlaceTransformRule : public CBaseTransformRule
@@ -52,6 +53,24 @@ public:
     ~CAnyPlaceTransformRule();
     bool deduce(const SHyperChar &src, const SHyperChar &dest);
     unsigned int apply(const SHyperChar &src, SHyperChar &dest) const;
+};
+
+class CHStringTransform
+{
+private:
+    vector<CBaseTransformRule*> rules;
+    unsigned int cost;
+    bool isInPlace;
+    bool isDigit;
+public:
+    CHStringTransform(bool _isInPlace, bool _isDigit): isInPlace(_isInPlace), isDigit(_isDigit) {;}
+    ~CHStringTransform();
+    unsigned int getSize() const {return rules.size(); }
+    void reset();
+    bool deduce(const CHyperString& src, const CHyperString& dest);
+    unsigned int transform(const CHyperString& src, CHyperString& dest) const;
+    unsigned int getCost() const {return cost;}
+    friend std::ostream& operator<< (std::ostream &out, const CHStringTransform &what);
 };
 
 #endif
