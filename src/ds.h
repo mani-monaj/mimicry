@@ -14,9 +14,9 @@ class SHyperChar
 {
 public:
     unsigned int pose;
-    char c;
+    unsigned char c;
     unsigned int count;
-    SHyperChar(unsigned int _pose, char _c, unsigned int _count): pose(_pose), c(_c), count(_count) {;}
+    SHyperChar(unsigned int _pose, unsigned char _c, unsigned int _count): pose(_pose), c(_c), count(_count) {;}
     SHyperChar(void) {;}
     bool operator ==(const SHyperChar& rhs) const
     {

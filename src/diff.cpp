@@ -1,6 +1,6 @@
 #include "diff.h"
 
-bool CDigitDiff::deduce(const char src, const char dest)
+bool CDigitDiff::deduce(const unsigned char src, const unsigned char dest)
 {
     if (src == dest) return false;
     replace = dest;
@@ -16,7 +16,7 @@ void CDigitDiff::updateReason()
     reason = _reason.str();
 }
 
-unsigned int CDigitDiff::apply(const char src, char &dest) const
+unsigned int CDigitDiff::apply(const unsigned char src, unsigned char &dest) const
 {
     dest = src;
     unsigned int totalCost = 0;
@@ -29,7 +29,7 @@ unsigned int CDigitDiff::apply(const char src, char &dest) const
 }
 
 
-bool CMathDiff::deduce(const char src, const char dest)
+bool CMathDiff::deduce(const unsigned char src, const unsigned char dest)
 {
     if (src == dest) return false;
     incr = dest - src;
@@ -45,9 +45,10 @@ void CMathDiff::updateReason()
     reason = _reason.str();
 }
 
-unsigned int CMathDiff::apply(const char src, char &dest) const
+unsigned int CMathDiff::apply(const unsigned char src, unsigned char &dest) const
 {
     dest = src + incr;
     if (dest > 'z') dest -= ('z' - 'a' + 1);
+    if (dest < 'a') dest += ('z' - 'a' + 1);
     return cost;
 }

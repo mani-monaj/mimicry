@@ -55,7 +55,6 @@ bool CInPlaceTransformRule::deduce(const SHyperChar &src, const SHyperChar &dest
     if (changeChar) {
         diffKernel->deduce(src.c, dest.c);
         totalCost += diffKernel->getCost();
-        cout << "Updating totalcost to " << totalCost << endl;
     }
     if (changeScale) {
         searchScale = src.count;
@@ -189,14 +188,6 @@ bool CHStringTransform::deduce(const CHyperString &src, const CHyperString &dest
     if (src == dest) return false;
     assert(src.getSize() == dest.getSize());
     rules.clear();
-//    bool isInPlace = true;
-//    for (unsigned int i = 0; i < src.getSize(); i++) {
-//        if (src.getDataCst().at(i).pose != dest.getDataCst().at(i).pose) {
-//            isInPlace = false;
-//            break;
-//        }
-//    }
-
 
     for (unsigned int i = 0; i < src.getSize(); i++) {
         CBaseTransformRule* t;
@@ -214,8 +205,10 @@ bool CHStringTransform::deduce(const CHyperString &src, const CHyperString &dest
     CHyperString dummy(src);
     transform(src, dummy);
     if (!(dummy == dest)) {
-        cout << "Dummy: " << dummy << " ~ " << dummy.getRawString()<< endl;
-        cout << "Dest:  " << dest << " ~ " << dest.getRawString() << endl;
+//        cout << "Rejected Rule:" <<endl;
+//        cout << *this << endl;
+//        cout << "Dummy: " << dummy << " ~ " << dummy.getRawString()<< endl;
+//        cout << "Dest:  " << dest << " ~ " << dest.getRawString() << endl;
         reset();
         return false;
     }
@@ -246,7 +239,7 @@ unsigned int CHStringTransform::transform(const CHyperString &src, CHyperString 
 std::ostream& operator<< (std::ostream &out, const CHStringTransform &what)
 {
     for (unsigned int i = 0; i < what.getSize(); i++) {
-        out << "Rule " << i << " : " << *(what.rules[i]) << std::endl;
+        out << "[Rule " << i << ": " << *(what.rules[i]) << "]";
     }
     return out;
 }

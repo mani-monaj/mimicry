@@ -9,28 +9,29 @@
 using namespace std;
 
 const bool debug = true;
-multimap<unsigned int, CBaseTransformRule*> mTransforms;
+multimap<unsigned int, CHStringTransform*> mTransforms;
 CHyperString  source;
 CHyperString  dest;
 CHyperString  target;
 
 void cleanup()
 {
-    for (multimap<unsigned int, CBaseTransformRule*>::iterator it = mTransforms.begin();
+    for (multimap<unsigned int, CHStringTransform*>::iterator it = mTransforms.begin();
          it != mTransforms.end(); ++it) {
         delete (*it).second;
     }
+    mTransforms.clear();
 }
 
 void dumpTransoforms()
 {
     unsigned int index = 0;
-    for (multimap<unsigned int, CBaseTransformRule*>::iterator it = mTransforms.begin();
+    for (multimap<unsigned int, CHStringTransform*>::iterator it = mTransforms.begin();
          it != mTransforms.end(); ++it) {
         index++;
         CHyperString dummy;
         (*it).second->transform(target, dummy);
-        cout << index << "," << dummy.getRawString() << "," << (*it).second->why();
+        cout << index << "," << dummy.getRawString() << "," << *((*it).second);
         cout << "," << (*it).first << endl;
     }
 }
@@ -50,13 +51,6 @@ int main(int argc, char** argv)
     dest.update(argv[2]);
     target.update(argv[3]);
 
-//    unsigned int i = 0;
-//    do {
-//        source.reconstruct();
-//        cout << i++ << " : " << source.getRawString() << endl;
-
-//    } while (next_permutation(source.getData().begin(), source.getData().end()));
-//    return 0;
 
     if (!
             ((source.getSize() > 0) &&
@@ -81,30 +75,33 @@ int main(int argc, char** argv)
         cout << target << " ~ "<< target.getRawString()<< endl;
     }
 
+
     // In Place Transforms
-    CHStringTransform* t = new CHStringTransform(false, true);
-    t->deduce(source, dest);
-    /*for (unsigned int i = 0; i < source.getSize(); i++) {
-        for (unsigned int j = 0; j < 2; j++)
-        {
-            CInPlaceTransformRule* t = new CInPlaceTransformRule("dummy", j == 0);
-            if (t->deduce(source.getDataCst()[i], dest.getDataCst()[i])) {
-                mTransforms.insert(pair<int, CBaseTransformRule*>(t->getCost(), t));
-            }
+    for (unsigned int j = 0; j < 2; j++) {
+        CHStringTransform *t = new CHStringTransform(true, j == 0);
+        CHyperString dummy;
+        if (t->deduce(source, dest)) {
+            unsigned int cost = t->transform(target, dummy);
+            mTransforms.insert(pair<unsigned int, CHStringTransform*>(cost, t));
         }
     }
 
-    dumpTransoforms();*/
-    if (debug) {
-        cout << "Number of rules in transform: " << t->getSize() << endl;
-    }
-    CHyperString dummy;
-    cout << "Rules : " << endl << *t << endl;
-    cout << "Cost : " << t->transform(target, dummy) << endl;
-    cout << "Result: " << dummy.getRawString() << endl;
+    //Any Place Transforms
+    unsigned int i = 0;
+    do {
+        for (unsigned int j = 0; j < 2; j++) {
+            CHStringTransform *t = new CHStringTransform(false, j == 0);
+            CHyperString dummy;
+            if (t->deduce(source, dest)) {
+                unsigned int cost = t->transform(target, dummy);
+                mTransforms.insert(pair<unsigned int, CHStringTransform*>(cost, t));
+            }
+        }
+    } while (next_permutation(source.getData().begin(), source.getData().end()));
 
-    delete t;
-    //cleanup();
+    dumpTransoforms();
+
+    cleanup();
     return 0;
 }
 

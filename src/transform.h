@@ -44,7 +44,7 @@ class CAnyPlaceTransformRule: public CBaseTransformRule
 private:
     bool changeChar;
     bool changeScale;
-    char searchChar;
+    unsigned char searchChar;
     unsigned int searchScale;
     unsigned int replaceScale;
     void updateReason();
@@ -66,7 +66,7 @@ public:
     CHStringTransform(bool _isInPlace, bool _isDigit): isInPlace(_isInPlace), isDigit(_isDigit) {;}
     ~CHStringTransform();
     unsigned int getSize() const {return rules.size(); }
-    void reset();
+    void reset();    
     bool deduce(const CHyperString& src, const CHyperString& dest);
     unsigned int transform(const CHyperString& src, CHyperString& dest) const;
     unsigned int getCost() const {return cost;}

@@ -14,31 +14,31 @@ public:
     unsigned int getCost() const { return cost; }
     virtual ~CBaseDiff() {;}
     virtual string why() const { return reason; }
-    virtual bool deduce(const char src, const char dest) = 0;
-    virtual unsigned int apply(const char src, char& dest) const = 0;
+    virtual bool deduce(const unsigned char src, const unsigned char dest) = 0;
+    virtual unsigned int apply(const unsigned char src, unsigned char& dest) const = 0;
 };
 
 class CNullDiff: public CBaseDiff
 {
 public:
     CNullDiff(): CBaseDiff("null", 0) {;}
-    bool deduce(const char src, const char dest) {return true;}
-    unsigned int apply(const char src, char& dest) const {dest = src; return 0;}
+    bool deduce(const unsigned char src, const unsigned char dest) {return true;}
+    unsigned int apply(const unsigned char src, unsigned char& dest) const {dest = src; return 0;}
 };
 
 /* Change anything with replace */
 class CDigitDiff: public CBaseDiff
 {
 private:
-    char replace;
+    unsigned char replace;
 public:
-    CDigitDiff(char _r):
+    CDigitDiff(unsigned char _r):
         replace(_r)
     { updateReason(); }
     CDigitDiff() {;}
     void updateReason();
-    bool deduce(const char src, const char dest);
-    unsigned int apply(const char src, char& dest) const;
+    bool deduce(const unsigned char src, const unsigned char dest);
+    unsigned int apply(const unsigned char src, unsigned char& dest) const;
 };
 
 /* Increment Diff */
@@ -52,8 +52,8 @@ public:
     { updateReason(); }
     CMathDiff() {;}
     void updateReason();
-    bool deduce(const char src, const char dest);
-    unsigned int apply(const char src, char& dest) const;
+    bool deduce(const unsigned char src, const unsigned char dest);
+    unsigned int apply(const unsigned char src, unsigned char& dest) const;
 };
 
 #endif
