@@ -198,6 +198,8 @@ bool CHStringTransform::deduce(const CHyperString &src, const CHyperString &dest
         }
         if (t->deduce(src.getDataCst()[i], dest.getDataCst()[i])) {
                 rules.push_back(t);
+        } else {
+            delete t;
         }
     }
     if (rules.size() == 0) return false;

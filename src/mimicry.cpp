@@ -95,6 +95,8 @@ int main(int argc, char** argv)
             if (t->deduce(source, dest)) {
                 unsigned int cost = t->transform(target, dummy);
                 mTransforms.insert(pair<unsigned int, CHStringTransform*>(cost, t));
+            } else {
+                delete t;
             }
         }
     } while (next_permutation(source.getData().begin(), source.getData().end()));
