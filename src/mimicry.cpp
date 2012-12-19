@@ -1,10 +1,10 @@
 #include <map>
 #include <iostream>
 #include <assert.h>
+#include <algorithm>
 #include "ds.h"
 #include "diff.h"
 #include "transform.h"
-#include "algorithm"
 
 using namespace std;
 
