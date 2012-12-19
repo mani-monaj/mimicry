@@ -4,13 +4,13 @@
 #include <iostream>
 #include <algorithm>
 
-unsigned int CBaseTransformRule::transform(const CHyperString &src, CHyperString &dest) const
+unsigned int CBaseTransformRule::transform(const CMetaString &src, CMetaString &dest) const
 {
     unsigned int totalCost = 0;
     dest.clear();
     //cout << "<DEBUG>" << endl;
     for (unsigned int i = 0; i < src.getSize(); i++) {
-        SHyperChar dummy;
+        SMetaChar dummy;
         totalCost += apply(src.getDataCst().at(i), dummy);
         //cout << i << " : " << src.getDataCst().at(i) << " -> " << dummy << " @ " << totalCost << endl;
         dest.getData().push_back(dummy);
@@ -42,7 +42,7 @@ CInPlaceTransformRule::~CInPlaceTransformRule()
     delete diffKernel;
 }
 
-bool CInPlaceTransformRule::deduce(const SHyperChar &src, const SHyperChar &dest)
+bool CInPlaceTransformRule::deduce(const SMetaChar &src, const SMetaChar &dest)
 {
     // This is "INPLACE"
     //cout << "Comparing " << src.c << ":" << src.count << " with " << dest.c << ":" << dest.count <<endl;
@@ -67,7 +67,7 @@ bool CInPlaceTransformRule::deduce(const SHyperChar &src, const SHyperChar &dest
 
 }
 
-unsigned int CInPlaceTransformRule::apply(const SHyperChar &src, SHyperChar &dest) const
+unsigned int CInPlaceTransformRule::apply(const SMetaChar &src, SMetaChar &dest) const
 {
     dest = src;
     if (src.pose != searchPose) return 0;
@@ -106,7 +106,7 @@ CAnyPlaceTransformRule::~CAnyPlaceTransformRule()
     delete diffKernel;
 }
 
-bool CAnyPlaceTransformRule::deduce(const SHyperChar &src, const SHyperChar &dest)
+bool CAnyPlaceTransformRule::deduce(const SMetaChar &src, const SMetaChar &dest)
 {
     if (src == dest) return false;
     changeChar = (src.c != dest.c);
@@ -134,7 +134,7 @@ bool CAnyPlaceTransformRule::deduce(const SHyperChar &src, const SHyperChar &des
     return false;
 }
 
-unsigned int CAnyPlaceTransformRule::apply(const SHyperChar &src, SHyperChar &dest) const
+unsigned int CAnyPlaceTransformRule::apply(const SMetaChar &src, SMetaChar &dest) const
 {
     dest = src;
     unsigned int totalCost = (25 * abs((int) src.pose - (int) dest.pose));
@@ -169,7 +169,7 @@ void CAnyPlaceTransformRule::updateReason()
 }
 
 
-void CHStringTransform::reset()
+void CMStringTransform::reset()
 {
     for (unsigned int i = 0; i < rules.size(); i++)
     {
@@ -178,12 +178,12 @@ void CHStringTransform::reset()
     rules.clear();
 }
 
-CHStringTransform::~CHStringTransform()
+CMStringTransform::~CMStringTransform()
 {
     reset();
 }
 
-bool CHStringTransform::deduce(const CHyperString &src, const CHyperString &dest)
+bool CMStringTransform::deduce(const CMetaString &src, const CMetaString &dest)
 {
     if (src == dest) return false;
     assert(src.getSize() == dest.getSize());
@@ -204,7 +204,7 @@ bool CHStringTransform::deduce(const CHyperString &src, const CHyperString &dest
     }
     if (rules.size() == 0) return false;
 
-    CHyperString dummy(src);
+    CMetaString dummy(src);
     transform(src, dummy);
     if (!(dummy == dest)) {
 //        cout << "Rejected Rule:" <<endl;
@@ -217,11 +217,11 @@ bool CHStringTransform::deduce(const CHyperString &src, const CHyperString &dest
     return true;
 }
 
-unsigned int CHStringTransform::transform(const CHyperString &src, CHyperString &dest) const
+unsigned int CMStringTransform::transform(const CMetaString &src, CMetaString &dest) const
 {
     unsigned int totalCost = 0;
     dest = src;
-    CHyperString dummy(dest);
+    CMetaString dummy(dest);
     for (unsigned int i = 0; i < rules.size(); i++)
     {
         for (unsigned int j = 0; j < src.getSize(); j++)
@@ -238,7 +238,7 @@ unsigned int CHStringTransform::transform(const CHyperString &src, CHyperString 
     return totalCost;
 }
 
-std::ostream& operator<< (std::ostream &out, const CHStringTransform &what)
+std::ostream& operator<< (std::ostream &out, const CMStringTransform &what)
 {
     for (unsigned int i = 0; i < what.getSize(); i++) {
         out << "[Rule " << i << ": " << *(what.rules[i]) << "]";

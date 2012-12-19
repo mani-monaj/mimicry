@@ -10,55 +10,55 @@
 using namespace std;
 
 // Lame Class, Converted from Struct
-class SHyperChar
+class SMetaChar
 {
 public:
     unsigned int pose;
     unsigned char c;
     unsigned int count;
-    SHyperChar(unsigned int _pose, unsigned char _c, unsigned int _count): pose(_pose), c(_c), count(_count) {;}
-    SHyperChar(void) {;}
-    bool operator ==(const SHyperChar& rhs) const
+    SMetaChar(unsigned int _pose, unsigned char _c, unsigned int _count): pose(_pose), c(_c), count(_count) {;}
+    SMetaChar(void) {;}
+    bool operator ==(const SMetaChar& rhs) const
     {
         return ((pose == rhs.pose) && (c == rhs.c) && (count == rhs.count));
     }
-    bool operator <(const SHyperChar& rhs) const
+    bool operator <(const SMetaChar& rhs) const
     {
         return pose < rhs.pose;
     }
-    friend std::ostream& operator<< (std::ostream &out, const SHyperChar &hc)
+    friend std::ostream& operator<< (std::ostream &out, const SMetaChar &hc)
     {
         out << "[" << hc.pose << ":" << hc.c << "^" << hc.count << "]";
         return out;
     }
 };
 
-class CHyperString
+class CMetaString
 {
 private:
     string rawData;
-    vector<SHyperChar> data;
+    vector<SMetaChar> data;
 
 public:
-    CHyperString();
-    CHyperString(const string &s);
+    CMetaString();
+    CMetaString(const string &s);
     void update(const string &s);
     void clear();
     void reconstruct();
 
     unsigned int getSize() const { return data.size(); }
-    const vector<SHyperChar>& getDataCst() const {return data;}
-    vector<SHyperChar>& getData() {return data;}
+    const vector<SMetaChar>& getDataCst() const {return data;}
+    vector<SMetaChar>& getData() {return data;}
 
     string getRawString() const;
     string getString() const;
 
-    bool operator==(const CHyperString& rhs) const
+    bool operator==(const CMetaString& rhs) const
     {
         return (rawData == rhs.rawData) && (data == rhs.data);
     }
 
-    friend std::ostream& operator<< (std::ostream &out, const CHyperString &hs)
+    friend std::ostream& operator<< (std::ostream &out, const CMetaString &hs)
     {
         out << hs.getString();
         return out;

@@ -16,9 +16,9 @@ public:
     unsigned int getCost() const {return cost;}
     virtual ~CBaseTransformRule() {;}
     virtual string why() const { return reason; }
-    virtual bool deduce(const SHyperChar &src, const SHyperChar& dest) = 0;
-    virtual unsigned int apply(const SHyperChar &src, SHyperChar& dest) const = 0;
-    unsigned int transform(const CHyperString& src, CHyperString &dest) const;
+    virtual bool deduce(const SMetaChar &src, const SMetaChar& dest) = 0;
+    virtual unsigned int apply(const SMetaChar &src, SMetaChar& dest) const = 0;
+    unsigned int transform(const CMetaString& src, CMetaString &dest) const;
     friend std::ostream& operator<< (std::ostream &out, const CBaseTransformRule &what);
 };
 
@@ -35,8 +35,8 @@ private:
 public:
     CInPlaceTransformRule(string _name, bool _isDigit);
     ~CInPlaceTransformRule();
-    bool deduce(const SHyperChar &src, const SHyperChar &dest);
-    unsigned int apply(const SHyperChar &src, SHyperChar &dest) const;
+    bool deduce(const SMetaChar &src, const SMetaChar &dest);
+    unsigned int apply(const SMetaChar &src, SMetaChar &dest) const;
 };
 
 class CAnyPlaceTransformRule: public CBaseTransformRule
@@ -51,11 +51,11 @@ private:
 public:
     CAnyPlaceTransformRule(string _name, bool _isDigit);
     ~CAnyPlaceTransformRule();
-    bool deduce(const SHyperChar &src, const SHyperChar &dest);
-    unsigned int apply(const SHyperChar &src, SHyperChar &dest) const;
+    bool deduce(const SMetaChar &src, const SMetaChar &dest);
+    unsigned int apply(const SMetaChar &src, SMetaChar &dest) const;
 };
 
-class CHStringTransform
+class CMStringTransform
 {
 private:
     vector<CBaseTransformRule*> rules;
@@ -63,14 +63,14 @@ private:
     bool isInPlace;
     bool isDigit;
 public:
-    CHStringTransform(bool _isInPlace, bool _isDigit): isInPlace(_isInPlace), isDigit(_isDigit) {;}
-    ~CHStringTransform();
+    CMStringTransform(bool _isInPlace, bool _isDigit): isInPlace(_isInPlace), isDigit(_isDigit) {;}
+    ~CMStringTransform();
     unsigned int getSize() const {return rules.size(); }
     void reset();    
-    bool deduce(const CHyperString& src, const CHyperString& dest);
-    unsigned int transform(const CHyperString& src, CHyperString& dest) const;
+    bool deduce(const CMetaString& src, const CMetaString& dest);
+    unsigned int transform(const CMetaString& src, CMetaString& dest) const;
     unsigned int getCost() const {return cost;}
-    friend std::ostream& operator<< (std::ostream &out, const CHStringTransform &what);
+    friend std::ostream& operator<< (std::ostream &out, const CMStringTransform &what);
 };
 
 #endif

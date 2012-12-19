@@ -2,17 +2,17 @@
 
 #include <iostream>
 
-CHyperString::CHyperString() : rawData("")
+CMetaString::CMetaString() : rawData("")
 {
     update("");
 }
 
-CHyperString::CHyperString(const string &s): rawData(s)
+CMetaString::CMetaString(const string &s): rawData(s)
 {
     update(s);
 }
 
-void CHyperString::update(const string &s)
+void CMetaString::update(const string &s)
 {
     rawData = s;
     unsigned char last; // TODO: Init this
@@ -23,13 +23,13 @@ void CHyperString::update(const string &s)
             data.back().count++;
             //pose++;
         } else {
-            data.push_back(SHyperChar(pose++, s[i], 1));
+            data.push_back(SMetaChar(pose++, s[i], 1));
         }
         last = s[i];
     }
 }
 
-void CHyperString::reconstruct()
+void CMetaString::reconstruct()
 {
     unsigned int size = 0;
     for (unsigned int i = 0; i < data.size(); i++) {
@@ -40,25 +40,25 @@ void CHyperString::reconstruct()
     // The list should be sorted by pose
     unsigned int index = 0;
     for (unsigned int i = 0; i < data.size(); i++) {
-        SHyperChar hc = data.at(i);
+        SMetaChar hc = data.at(i);
         for (unsigned int j = 0; j < hc.count; j++) {
             rawData[index++] = hc.c;
         }
     }
 }
 
-void CHyperString::clear()
+void CMetaString::clear()
 {
     data.clear();
     rawData.clear();
 }
 
-string CHyperString::getRawString() const
+string CMetaString::getRawString() const
 {
     return rawData;
 }
 
-string CHyperString::getString() const
+string CMetaString::getString() const
 {
     stringstream debug;
     for (unsigned int i = 0; i < data.size(); i++)
