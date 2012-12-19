@@ -19,7 +19,7 @@ The executable will be placed in `build/bin`.
 
 ### Disclaimer
 
-It turned out during the meetup that the original problem is called [copycat](http://en.wikipedia.org/wiki/Copycat_(software)). This code is by no means a formal way to solve the copycat problem. It is a heuristic approach to solve a subset of copycat problems. Please check [here](http://en.wikipedia.org/wiki/Copycat_(software)#External_links) for some formal descriptions and solutions.
+It turned out during the meetup that the original problem is called [copycat](http://goo.gl/2stNC). This code is by no means a formal way to solve the copycat problem. It is a heuristic approach to solve a subset of copycat problems. Please check [here](http://goo.gl/sX4oD) for some formal descriptions and solutions.
 
 ### Sample Output
 
